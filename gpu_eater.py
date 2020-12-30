@@ -43,6 +43,11 @@ def occupy_gpus_mem(free=1536):
     print('Occupy all device\'s mem finished')
 
 
+def occupy_gpu_mem_for_ddp(rank, free=1536):
+    mem_info = check_devices_mem()[rank]
+    occupy_device_mem(rank, mem_info, free)
+
+
 def fake_train(shape=(1024, 1024, 1024)):
     gpu_num = torch.cuda.device_count()
     print('Start training')

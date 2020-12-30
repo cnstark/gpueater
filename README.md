@@ -23,6 +23,8 @@ cd /path/to/your_project
 git clone https://github.com/cnstark/gpueater.git
 ```
 
+#### 单卡训练
+
 在训练开始前，设置`CUDA_VISIBLE_DEVICES`环境变量后加入
 
 ```python
@@ -42,6 +44,28 @@ if __name__ == '__main__':
 
     # occury gpus mem
     occupy_gpus_mem()
+
+    # your train code
+```
+
+#### 多卡训练
+
+* DP
+
+与单卡相同
+
+* DDP
+
+由于DDP使用了分布式多进程，通常每个进程占用一块显卡，因此需要在**每个进程**中使用`occupy_gpu_mem_for_ddp`接口，各进程分别占满显存。
+
+```python
+# import your package
+from gpu_eater import occupy_gpu_mem_for_ddp
+
+
+# train process
+def train(rank, world_size):
+    occupy_gpu_mem_for_ddp(rank)
 
     # your train code
 ```
